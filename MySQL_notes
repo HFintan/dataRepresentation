@@ -1,0 +1,34 @@
+To login, password:
+mysql -u fintan -ppassword
+(or andrew)
+
+Or as sudo
+sudo mysql -u root -p
+
+# To create a user
+CREATE USER 'newuser'@'localhost' IDENTIFIED BY 'password';
+# To grant privileges on a particular database
+GRANT ALL PRIVILEGES ON datarep.* TO 'fintan'@'localhost';
+
+
+show databases;
+create database datarep;
+
+use datarep
+
+create table student (
+	id int NOT NULL auto_increment,
+	firstname varchar(100),
+	age int(3),
+	PRIMARY KEY(id)
+	);
+
+insert into student (firstname, age) values ('joe',56);
+
+select * from student;
+
+update student set firstname='mary' where id = 1;
+
+delete from student where id = 1;
+
+
