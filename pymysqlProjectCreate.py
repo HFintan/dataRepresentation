@@ -13,11 +13,13 @@ mycursor = mydb.cursor()
 sql="CREATE TABLE vaccine (
     PPSN VARCHAR(9) PRIMARY KEY, 
     name VARCHAR(63) NOT NULL, 
-    age INT NOT NULL, 
+    age INT, 
+    string VARCHAR(63) NOT NULL,
     location VARCHAR(255)),
-    job VARCHAR(63),
+    occupation VARCHAR(63),
     stage INT, 
-    vaccinated BOOLEAN
+    vaccinated 1 BOOLEAN
+    vaccinated 2 BOOLEAN
 );"
 
 mycursor.execute(sql)
