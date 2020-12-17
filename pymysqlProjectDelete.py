@@ -3,16 +3,17 @@ import dbconfig as cfg
 
 mydb = mysql.connector.connect(
     host=cfg.mysql['host'],
-    user=cfg.mysql['username'],
+    user=cfg.mysql['user'],
     password=cfg.mysql['password'],
     database=cfg.mysql['database']
 )
 
-cursor = db.cursor()
-sql = "delete from vaccine where PPS no. = %s"
+
+cursor = mydb.cursor()
+sql = "delete from vaccine where ppsn = %s"
 values = (1,)
 
 cursor.execute(sql,values)
 
-db.commit()
-print("Deleted.")
+mydb.commit()
+print("delete done")
