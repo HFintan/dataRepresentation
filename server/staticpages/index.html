@@ -1,0 +1,138 @@
+<html>
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <title>DR Project</title>
+
+    </head>
+    <body>
+        <div id="create-edit" style="display: none">
+            <h2>Create-Edit</h2>
+            <table>
+                <tr>
+                    <td>PPSN</td>
+                    <td><input type="text" name="PPSN"></td>      
+                </tr>
+                <tr>
+                    <td>name</td>
+                    <td><input type="text" name="name"></td>      
+                </tr>
+                <tr>
+                    <td>Email</td>
+                    <td><input type="text" name="email"></td>      
+                </tr>
+                <tr>
+                    <td>Age</td>
+                    <td><input type="text" name="age"></td>      
+                </tr>
+                <tr>
+                    <td>Location</td>
+                    <td><input type="text" name="location"></td>      
+                </tr>
+                <tr>
+                    <td>Medical</td>
+                    <td><input type="text" name="medical"></td>      
+                </tr>
+                <tr>
+                    <td>Occupation</td>
+                    <td><input type="text" name="occupation"></td>      
+                </tr>
+                <tr>
+                    <td>Stage</td>
+                    <td><input type="text" name="stage"></td>      
+                </tr>
+                <tr>
+                    <td>Vaccinated_1</td>
+                    <td><input type="text" name="vaccinated_1"></td>      
+                </tr>
+                <tr>
+                    <td>Vaccinated_2</td>
+                    <td><input type="text" name="vaccinated_2"></td>
+                </tr>
+                    <td></td><td><button id="create-edit-button">Go</button></td>  
+                </tr>
+            </table>
+        </div>
+        <div id="display">
+            <h2>People</h2>
+            <table id="peopleTable" class="table">
+                <tr>
+                    <th>PPSN</th><th>Name</th><th>Email</th><th>Age</th><th>Location</th><th>Medical</th><th>Occupation</th><th>Stage</th><th>Vaccinated_1</th><th>Vaccinated_2</th>
+                </tr>
+                <tr PPSN ="1234567a">
+                    <td>1234567a</td>
+                    <td>Carl Friedrich Gauss</td>
+                    <td>mathem@icia.ns</td>
+                    <td>243</td>
+                    <td>Gottingen</td>
+                    <td>NULL</td>
+                    <td>Mathematician</td>
+                    <td>NULL</td>
+                    <td>NULL</td>
+                    <td>NULL</td>
+                    <td><button onclick="showUpdate(this)">Update</button></td>
+                    <td><button onclick="dodelete(this)">Delete</button></td>
+                </tr>
+            </table>
+        </div>
+        <script>
+            function populateTable(){
+                // ajax getAll
+                //person = {
+                //    PPSN:76564321,
+                //    name:"Ada Lovelace",
+                //    email:"a.lovelace@gmit.ie",
+                //    age:"null",
+                //    location:"Galway",
+                //   medical:"null",
+                //    occupation:"Programmer",
+                //    stage:"3",
+                //    vaccinated_1:'true',
+                //    vaccinated_2:"false",
+                $.ajax({
+                    url:'http://127.0.0.1:5000/vaccine',
+                    method:'GET',
+                    datatype:'JSON',
+                    success:function(results){
+                        for (person of results){
+                            addPersonToTable(person)
+                        }
+                    },
+                    error:function(xhr,status,error){
+                        console.log("error"+error+" code:"+status)
+                    }
+                })
+            }
+            function addPersonToTable(person){
+                tableElem = document.getElementById("peopleTable")
+                rowElem = tableElem.insertRow(-1)
+                rowElem.setAttribute("id",person.PPSN)    
+                cell1=rowElem.insertCell(0)
+                cell1.innerHTML = person.PPSN
+                cell2=rowElem.insertCell(1)
+                cell2.innerHTML = person.name
+                cell3=rowElem.insertCell(2)
+                cell3.innerHTML = person.email
+                cell4=rowElem.insertCell(3)
+                cell4.innerHTML = person.age
+                cell5=rowElem.insertCell(4)
+                cell5.innerHTML = person.location
+                cell6=rowElem.insertCell(5)
+                cell6.innerHTML = person.medical
+                cell7=rowElem.insertCell(6)
+                cell7.innerHTML = person.occupation
+                cell8=rowElem.insertCell(7)
+                cell8.innerHTML = person.stage
+                cell9=rowElem.insertCell(8)
+                cell9.innerHTML = person.vaccinated_1
+                cell10=rowElem.insertCell(9)
+                cell10.innerHTML = person.vaccinated_2
+                cell11=rowElem.insertCell(10)
+                cell11.innerHTML = '<button onclick ="showUpdate(this)">Update</button>'
+                cell12=rowElem.insertCell(11)
+                cell12.innerHTML = '<button onclick ="doDelete(this)">Delete</button>'
+            }
+            populateTable()
+        </script>
+    </body>
+</html>
