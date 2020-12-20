@@ -1,19 +1,28 @@
 import mysql.connector
-import dbconfig as cfg
+#import dbconfig as cfg
 
 class VaccineDao:
     db=""
     def __init__(self):
+    # dbconfig was giving me an error for Django, so I abandoned it.
+    #    self.db = mysql.connector.connect(
+    #    host=cfg.mysql['host'],
+    #    user=cfg.mysql['user'],
+    #    password=cfg.mysql['password'],
+    #    database=cfg.mysql['database']
+    #)
         self.db = mysql.connector.connect(
-        host=cfg.mysql['host'],
-        user=cfg.mysql['user'],
-        password=cfg.mysql['password'],
-        database=cfg.mysql['database']
+        host='localhost',
+        user='fintan',
+        password='password',
+        database='datarepresentation'
     )
+
 
     def create(self,person):
         cursor=self.db.cursor()
-        sql = "insert into people (PPSN, name, email, age, location, medical, occupation, stage, vaccinated_1, vaccinated_2) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+#        sql = "insert into people (PPSN, name, email, age, location, medical, occupation, stage, vaccinated_1, vaccinated_2) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+        sql = "insert into people (PPSN, name, email, age, location,medical, occupation, stage, vaccinated_1, vaccinated_2) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
         values = [
             person['PPSN'],
             person['name'],

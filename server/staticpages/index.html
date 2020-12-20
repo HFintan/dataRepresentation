@@ -1,7 +1,7 @@
 <html>
     <head>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">-->
         <title>DR Project</title>
 
     </head>
@@ -78,19 +78,20 @@
         <script>
             function populateTable(){
                 // ajax getAll
-                //person = {
-                //    PPSN:76564321,
-                //    name:"Ada Lovelace",
-                //    email:"a.lovelace@gmit.ie",
-                //    age:"null",
-                //    location:"Galway",
-                //   medical:"null",
-                //    occupation:"Programmer",
-                //    stage:"3",
-                //    vaccinated_1:'true',
-                //    vaccinated_2:"false",
+                person = {
+                    PPSN:76564321,
+                    name:"Ada Lovelace",
+                    email:"a.lovelace@gmit.ie",
+                    age:"null",
+                    location:"Galway",
+                   medical:"null",
+                    occupation:"Programmer",
+                    stage:"3",
+                    vaccinated_1:'true',
+                    vaccinated_2:"false",
+                }
                 $.ajax({
-                    url:'http://127.0.0.1:5000/vaccine',
+                    url:'http://127.0.0.1:5000/people',
                     method:'GET',
                     datatype:'JSON',
                     success:function(results){
@@ -135,4 +136,4 @@
             populateTable()
         </script>
     </body>
-</html>
+</html>               

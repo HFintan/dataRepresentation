@@ -11,6 +11,6 @@ db = mysql.connector.connect(
 cursor = db.cursor()
 
 # Breaking lines should be neater and nicer, but threw an error; maybe come back FH
-sql="CREATE TABLE vaccine (PPSN VARCHAR(9) PRIMARY KEY, name VARCHAR(63) NOT NULL,  email VARCHAR(63) NOT NULL, age INT, location VARCHAR(255), medical BOOLEAN, occupation VARCHAR(63), stage INT, vaccinated_1 BOOLEAN, vaccinated_2 BOOLEAN);"
+sql="CREATE TABLE people (PPSN INT PRIMARY KEY, name VARCHAR(63) NOT NULL,  email VARCHAR(63) NOT NULL, age INT, location VARCHAR(255), medical BOOLEAN, occupation VARCHAR(63), stage INT, vaccinated_1 BOOLEAN, vaccinated_2 BOOLEAN);"
 
 cursor.execute(sql)
