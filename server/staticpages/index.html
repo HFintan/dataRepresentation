@@ -1,14 +1,14 @@
 <html>
     <head>
-        <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <title>DR Project</title>
 
     </head>
     <body>
-        <div id="create-edit" style="display: none">
-            <h2>Create-Edit</h2>
-            <table>
+        <div id="create-update" style="display: none">
+            <h2>Create-Update</h2>
+            <table id="createUpdateForm"> 
                 <tr>
                     <td>PPSN</td>
                     <td><input type="text" name="PPSN"></td>      
@@ -49,11 +49,12 @@
                     <td>Vaccinated_2</td>
                     <td><input type="text" name="vaccinated_2"></td>
                 </tr>
-                    <td></td><td><button id="create-edit-button">Go</button></td>  
+                    <td></td><td><button id="create-button" onclick="doCreate()">Go</button></td>  
                 </tr>
             </table>
         </div>
         <div id="display">
+            <button onClick="showCreate()">Create</button>  
             <h2>People</h2>
             <table id="peopleTable" class="table">
                 <tr>
@@ -76,6 +77,60 @@
             </table>
         </div>
         <script>
+            function showCreate(){
+                document.getElementById('display').style.display = "none"
+                document.getElementById('create-update').style.display = "block"
+            }
+            function doCreate(){
+                console.log("in doCreate")
+                person = getPersonFromForm()
+                $.ajax({
+                    url:"/people",
+                    data:JSON.stringify(person),
+                    method:"POST",
+                    dataType:"JSON",
+                    contentType: "application/json; charset=utf-8",
+                    success:function(result){
+                        console.log(result)
+                        addPersonToTable(person)
+                        showDisplay()
+                    },
+                    error:function(xhr,status,error){
+                        console.log("error"+error)
+                    }
+                })
+
+            }
+            function getPersonFromForm(){
+                var form = document.getElementById('createUpdateForm')
+                var person = {}
+                person.PPSN = form.querySelector('input[name="PPSN"]').value 
+                person.name = form.querySelector('input[name="name"]').value 
+                person.email = form.querySelector('input[name="email"]').value
+                if (form.querySelector('input[name=age]').value == "")
+                    {person.age = null} else
+                    {person.age = form.querySelector('input[name=age]').value};
+                person.location = form.querySelector('input[name="location"]').value 
+                if (form.querySelector('input[name=medical]').value == "")
+                    {person.medical = null} else
+                    {person.medical = form.querySelector('input[name=medical]').value};
+                person.occupation = form.querySelector('input[name="occupation"]').value 
+                if (form.querySelector('input[name=stage]').value == "")
+                    {person.stage = null} else
+                    {person.stage = form.querySelector('input[name=stage]').value};                
+                if (form.querySelector('input[name=vaccinated_1]').value == "")
+                    {person.vaccinated_1 = null} else
+                    {person.vaccinated_1 = form.querySelector('input[name=vaccinated_1]').value};                
+                if (form.querySelector('input[name=vaccinated_2]').value == "")
+                    {person.vaccinated_2 = null} else
+                    {person.vaccinated_2 = form.querySelector('input[name=vaccinated_2]').value};                
+                //console.log(person) 
+                return person
+            }
+            function showDisplay(){
+                document.getElementById('display').style.display = "block"
+                document.getElementById('create-update').style.display = "none"
+            }
             function populateTable(){
                 // ajax getAll
                 person = {
