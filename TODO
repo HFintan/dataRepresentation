@@ -5,4 +5,8 @@ Regex works on python - perhaps do similar for other
 HTML objecting to 1234567B 
 An identifier or keyword cannot immediately follow a numeric literal.
 
+Check back with config. I think there's a conflict with the updated Django
+for some reason.
 
+Amend input for forms if poss - the python to mysql handles this, but
+that's not how the info will be input, so rather pointless.
