@@ -10,3 +10,7 @@ for some reason.
 
 Amend input for forms if poss - the python to mysql handles this, but
 that's not how the info will be input, so rather pointless.
+
+Delete is not updating mysql immediately, for some reason, but if I create
+a new entry, then both the creation and deletion will be updated in the
+mysql.

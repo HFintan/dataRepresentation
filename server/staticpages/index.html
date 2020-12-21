@@ -7,7 +7,7 @@
     </head>
     <body>
         <div id="create-update" style="display: none">
-            <h2>Create-Update</h2>
+            <h2>Create/Update</h2>
             <table id="createUpdateForm"> 
                 <tr>
                     <td>PPSN</td>
@@ -62,7 +62,7 @@
                 <tr>
                     <th>PPSN</th><th>Name</th><th>Email</th><th>Age</th><th>Location</th><th>Medical</th><th>Occupation</th><th>Stage</th><th>Vaccinated_1</th><th>Vaccinated_2</th>
                 </tr>
-                <tr PPSN ="1234567a">
+                <!--<tr PPSN ="1234567a">
                     <td>1234567a</td>
                     <td>Carl Friedrich Gauss</td>
                     <td>mathem@icia.ns</td>
@@ -75,7 +75,7 @@
                     <td>NULL</td>
                     <td><button onclick="showUpdate(this)">Update</button></td>
                     <td><button onclick="dodelete(this)">Delete</button></td>
-                </tr>
+                </tr>-->
             </table>
         </div>
         <script>
@@ -87,6 +87,8 @@
             }
             function showUpdate(thisElem){
                 var rowElement = thisElem.parentNode.parentNode;
+                person = readPersonFromRow(rowElement)
+                populateForm(person)
                 PPSN = rowElement.getAttribute("id");
                 document.getElementById("idInput").value=PPSN
                 document.getElementById("idInput").disabled = true
@@ -95,6 +97,53 @@
                 document.getElementById('create-button').style.display = "none"
                 document.getElementById('create-update').style.display = "block"
             }
+
+            function readPersonFromRow(rowElement){
+                person = {}
+                person.PPSN = rowElement.getAttribute("id");
+                person.name = rowElement.cells[1].firstChild.textContent 
+                person.email = rowElement.cells[2].firstChild.textContent 
+                if (rowElement.cells[3].firstChild != null)
+                   {person.age = rowElement.cells[3].firstChild.textContent}
+                if (rowElement.cells[4].firstChild != null)
+                    {person.location = rowElement.cells[4].firstChild.textContent} 
+                if (rowElement.cells[5].firstChild != null)
+                    person.medical = rowElement.cells[5].firstChild.textContent 
+                if (rowElement.cells[6].firstChild != null)
+                    person.occupation = rowElement.cells[6].firstChild.textContent 
+                if (rowElement.cells[7].firstChild != null)
+                    person.stage = rowElement.cells[7].firstChild.textContent 
+                if (rowElement.cells[8].firstChild != null)
+                    person.vaccinated_1 = rowElement.cells[8].firstChild.textContent 
+                if (rowElement.cells[9].firstChild != null)
+                    person.vaccinated_2 = rowElement.cells[9].firstChild.textContent 
+                return person
+            }
+
+            function populateForm(person){
+                var form = document.getElementById('createUpdateForm')
+                form.querySelector('input[name="PPSN"]').value = person.PPSN  
+                form.querySelector('input[name="name"]').value = person.name  
+                form.querySelector('input[name="email"]').value = person.email
+                if (form.querySelector('input[name=age]').value == "")
+                    {person.age = null} else
+                    {form.querySelector('input[name=age]').value = person.age};
+                person.location = form.querySelector('input[name="location"]').value 
+                if (form.querySelector('input[name=medical]').value == "")
+                    {person.medical = null} else
+                    {form.querySelector('input[name=medical]').value = person.medical};
+                person.occupation = form.querySelector('input[name="occupation"]').value 
+                if (form.querySelector('input[name=stage]').value == "")
+                    {person.stage = null} else
+                    {form.querySelector('input[name=stage]').value = person.stage};                
+                if (form.querySelector('input[name=vaccinated_1]').value == "")
+                    {person.vaccinated_1 = null} else
+                    {form.querySelector('input[name=vaccinated_1]').value = person.vaccinated_1};                
+                if (form.querySelector('input[name=vaccinated_2]').value == "")
+                    {person.vaccinated_2 = null} else
+                    {form.querySelector('input[name=vaccinated_2]').value = person.vaccinated_2};                 
+            }
+
             function doCreate(){
                 console.log("in doCreate")
                 person = getPersonFromForm()
@@ -108,6 +157,7 @@
                         console.log(result)
                         addPersonToTable(person)
                         showDisplay()
+                        clearForm()
                     },
                     error:function(xhr,status,error){
                         console.log("error"+error)
@@ -115,6 +165,29 @@
                 })
 
             }
+
+            function doUpdate(){
+                person = getPersonFromForm()
+                updateServer(person)
+            }
+
+            function updateServer(book) {
+                $.ajax({
+                    url: "/people/"+person.PPSN,
+                    data: JSON.stringify(person),
+                    method: "PUT",
+                    dataType: "JSON",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (result) {
+                        console.log(result)
+                        updateTableRow(person)
+                        showDisplay()
+                        clearForm()
+                    }
+
+                })
+            }
+
             function doDelete(thisElem){
                 var tableElement = document.getElementById('peopleTable');
                 var rowElement = thisElem.parentNode.parentNode;
@@ -132,6 +205,37 @@
                     }
                 })
             }
+
+            function updateTableRow(person){
+                rowElement = document.getElementById(person.PPSN)
+                rowElement.cells[1].firstChild.textContent = person.name
+                rowElement.cells[2].firstChild.textContent = person.email
+                console.log(rowElement.cells[3].firstChild)
+                if (rowElement.cells[3].firstChild == null)
+                    {rowElement.cells[3].firstChild = ""}
+                else     
+                    {rowElement.cells[3].firstChild.textContent = person.age}
+                rowElement.cells[4].firstChild.textContent = person.location
+                if (rowElement.cells[5].firstChild == null)
+                    {rowElement.cells[5].firstChild = ""}
+                else     
+                    {rowElement.cells[5].firstChild.textContent = person.medical}
+                rowElement.cells[6].firstChild.textContent = person.occupation
+                if (rowElement.cells[7].firstChild == null)
+                    {rowElement.cells[7].firstChild = ""}
+                else     
+                    {rowElement.cells[7].firstChild.textContent = person.stage}
+                if (rowElement.cells[8].firstChild == null)
+                    {rowElement.cells[8].firstChild = ""}
+                else     
+                    {rowElement.cells[8].firstChild.textContent = person.vaccinated_1}
+                if (rowElement.cells[9].firstChild == null)
+                    {rowElement.cells[9].firstChild = ""}
+                else     
+                    {rowElement.cells[9].firstChild.textContent = person.vaccinated_2}        
+                console.log("updating table")
+            }
+
             function getPersonFromForm(){
                 var form = document.getElementById('createUpdateForm')
                 var person = {}
@@ -190,6 +294,22 @@
                     }
                 })
             }
+
+            function clearForm(){
+                var form = document.getElementById('createUpdateForm')
+                form.querySelector('input[name="PPSN"]').value = ''
+                form.querySelector('input[name="PPSN"]').disabled = false 
+                form.querySelector('input[name="name"]').value = ''  
+                form.querySelector('input[name="email"]').value = ''
+                form.querySelector('input[name="age"]').value = ''
+                form.querySelector('input[name="location"]').value = ''
+                form.querySelector('input[name="medical"]').value = ''
+                form.querySelector('input[name="occupation"]').value = '' 
+                form.querySelector('input[name="stage"]').value = ''                
+                form.querySelector('input[name="vaccinated_1"]').value = ''
+                form.querySelector('input[name="vaccinated_2"]').value = ''                 
+            }
+
             function addPersonToTable(person){
                 tableElem = document.getElementById("peopleTable")
                 rowElem = tableElem.insertRow(-1)
