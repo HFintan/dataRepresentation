@@ -99,13 +99,13 @@ while occupation == 12345:
 while stage == 12345:
         value_stage = input('Stage:')
         if re.match(r'\d*$',value_stage) == None:
-            print("If provided, stage must be an integer between 1 and 12.")
+            print("If provided, stage must be an integer between 1 and 15.")
         elif value_stage == '':
             stage = None
-        elif 1 <= int(value_stage) <=12:
+        elif 1 <= int(value_stage) <=15:
             stage = str(value_stage)
         else:
-            print("If provided, stage must be an integer between 1 and 12.")
+            print("If provided, stage must be an integer between 1 and 15.")
 
 while vaccinated_1 == 12345:
     value_vaccinated_1 = input('Had first vaccination? y/n. If unknown, leave blank.')

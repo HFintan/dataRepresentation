@@ -5,6 +5,14 @@
         <title>DR Project</title>
 
     </head>
+    <style>
+        h1 {text-align: center;}
+        body {
+    background-color: #1ad856;
+    margin-top: 10px;
+}
+    </style>
+    <h1>Vaccination Queue</h1>
     <body>
         <div id="create-update" style="display: none">
             <h2>Create/Update</h2>
@@ -101,8 +109,10 @@
             function readPersonFromRow(rowElement){
                 person = {}
                 person.PPSN = rowElement.getAttribute("id");
-                person.name = rowElement.cells[1].firstChild.textContent 
-                person.email = rowElement.cells[2].firstChild.textContent 
+                if (rowElement.cells[1].firstChild != null)
+                    {person.name = rowElement.cells[1].firstChild.textContent} 
+                if (rowElement.cells[2].firstChild != null)
+                    {person.email = rowElement.cells[2].firstChild.textContent}
                 if (rowElement.cells[3].firstChild != null)
                    {person.age = rowElement.cells[3].firstChild.textContent}
                 if (rowElement.cells[4].firstChild != null)
@@ -116,7 +126,8 @@
                 if (rowElement.cells[8].firstChild != null)
                     person.vaccinated_1 = rowElement.cells[8].firstChild.textContent 
                 if (rowElement.cells[9].firstChild != null)
-                    person.vaccinated_2 = rowElement.cells[9].firstChild.textContent 
+                    person.vaccinated_2 = rowElement.cells[9].firstChild.textContent
+                console.log("person is", person)
                 return person
             }
 
@@ -125,23 +136,27 @@
                 form.querySelector('input[name="PPSN"]').value = person.PPSN  
                 form.querySelector('input[name="name"]').value = person.name  
                 form.querySelector('input[name="email"]').value = person.email
-                if (form.querySelector('input[name=age]').value == "")
-                    {person.age = null} else
+                if (person.age == null)
+                    {form.querySelector('input[name=age]').value = ""} else
                     {form.querySelector('input[name=age]').value = person.age};
-                person.location = form.querySelector('input[name="location"]').value 
-                if (form.querySelector('input[name=medical]').value == "")
-                    {person.medical = null} else
+                if (person.location == null)
+                    {form.querySelector('input[name=location]').value = ""} else
+                    {form.querySelector('input[name=location]').value = person.location};
+                if (person.medical == null)
+                    {form.querySelector('input[name=medical]').value = ""} else
                     {form.querySelector('input[name=medical]').value = person.medical};
-                person.occupation = form.querySelector('input[name="occupation"]').value 
-                if (form.querySelector('input[name=stage]').value == "")
-                    {person.stage = null} else
-                    {form.querySelector('input[name=stage]').value = person.stage};                
-                if (form.querySelector('input[name=vaccinated_1]').value == "")
-                    {person.vaccinated_1 = null} else
-                    {form.querySelector('input[name=vaccinated_1]').value = person.vaccinated_1};                
-                if (form.querySelector('input[name=vaccinated_2]').value == "")
-                    {person.vaccinated_2 = null} else
-                    {form.querySelector('input[name=vaccinated_2]').value = person.vaccinated_2};                 
+                if (person.occupation == null)
+                    {form.querySelector('input[name=occupation]').value = ""} else
+                    {form.querySelector('input[name=occupation]').value = person.occupation};
+                if (person.stage == null)
+                    {form.querySelector('input[name=stage]').value = ""} else
+                    {form.querySelector('input[name=stage]').value = person.stage};
+                if (person.vaccinated_1 == null)
+                    {form.querySelector('input[name=vaccinated_1]').value = ""} else
+                    {form.querySelector('input[name=vaccinated_1]').value = person.vaccinated_1};
+                if (person.vaccinated_2 == null)
+                    {form.querySelector('input[name=vaccinated_2]').value = ""} else
+                    {form.querySelector('input[name=vaccinated_2]').value = person.vaccinated_2};
             }
 
             function doCreate(){
@@ -215,12 +230,20 @@
                     {rowElement.cells[3].firstChild = ""}
                 else     
                     {rowElement.cells[3].firstChild.textContent = person.age}
-                rowElement.cells[4].firstChild.textContent = person.location
+                if (rowElement.cells[4].firstChild == null)
+                    {rowElement.cells[4].firstChild = ""}
+                else     
+                    {rowElement.cells[4].firstChild.textContent = person.location}
+                //rowElement.cells[4].firstChild.textContent = person.location
                 if (rowElement.cells[5].firstChild == null)
                     {rowElement.cells[5].firstChild = ""}
                 else     
                     {rowElement.cells[5].firstChild.textContent = person.medical}
-                rowElement.cells[6].firstChild.textContent = person.occupation
+                if (rowElement.cells[6].firstChild == null)
+                    {rowElement.cells[6].firstChild = ""}
+                else     
+                    {rowElement.cells[6].firstChild.textContent = person.occupation}
+                //rowElement.cells[6].firstChild.textContent = person.occupation
                 if (rowElement.cells[7].firstChild == null)
                     {rowElement.cells[7].firstChild = ""}
                 else     
@@ -239,17 +262,27 @@
             function getPersonFromForm(){
                 var form = document.getElementById('createUpdateForm')
                 var person = {}
-                person.PPSN = form.querySelector('input[name="PPSN"]').value 
-                person.name = form.querySelector('input[name="name"]').value 
-                person.email = form.querySelector('input[name="email"]').value
+                if (form.querySelector('input[name=PPSN]').value == "")
+                    {person.PPSN = null} else
+                    {person.PPSN = form.querySelector('input[name=PPSN]').value};
+                if (form.querySelector('input[name="name"]').value == "")
+                    {person.name = null} else
+                    {person.name = form.querySelector('input[name="name"]').value};
+                if (form.querySelector('input[name="email"]').value == "")
+                    {person.email = null} else
+                    {person.email = form.querySelector('input[name="email"]').value};
                 if (form.querySelector('input[name=age]').value == "")
                     {person.age = null} else
                     {person.age = form.querySelector('input[name=age]').value};
-                person.location = form.querySelector('input[name="location"]').value 
+                if (form.querySelector('input[name="location"]').value == "")
+                    {person.location = null} else
+                    {person.location = form.querySelector('input[name="location"]').value};
                 if (form.querySelector('input[name=medical]').value == "")
                     {person.medical = null} else
                     {person.medical = form.querySelector('input[name=medical]').value};
-                person.occupation = form.querySelector('input[name="occupation"]').value 
+                if (form.querySelector('input[name="occupation"]').value == "")
+                    {person.occupation = null} else
+                    {person.occupation = form.querySelector('input[name="occupation"]').value};
                 if (form.querySelector('input[name=stage]').value == "")
                     {person.stage = null} else
                     {person.stage = form.querySelector('input[name=stage]').value};                
@@ -335,7 +368,7 @@
                 cell10=rowElem.insertCell(9)
                 cell10.innerHTML = person.vaccinated_2
                 cell11=rowElem.insertCell(10)
-                cell11.innerHTML = '<button onclick ="showUpdate(this)">Update</button>'
+                cell11.innerHTML = '<button onclick ="showUpdate(this)"; reload()>Update</button>'
                 cell12=rowElem.insertCell(11)
                 cell12.innerHTML = '<button onclick ="doDelete(this)">Delete</button>'
             }
