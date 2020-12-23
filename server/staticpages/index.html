@@ -11,23 +11,38 @@
     background-color: #1ad856;
     margin-top: 10px;
 }
+input:invalid {
+  border: 3px solid red;
+}
+input[required] {
+  background-color: cyan;
+}
+table, th, td {
+  padding: 10px;
+}
+table {
+  border-spacing: 15px;
+}
     </style>
     <h1>Vaccination Queue</h1>
     <body>
+        <p>Register your details below. Details on the planned vaccine stages are available <a href="https://www.gov.ie/en/publication/39038-provisional-vaccine-allocation-groups/">here</a>. Caveat: System seems to struggle when there are more than a couple of dozen rows, so might only be suitable for the NHS.
+        <br> Refreshing is unfortunately required after some updates.
+        </p>
         <div id="create-update" style="display: none">
             <h2>Create/Update</h2>
             <table id="createUpdateForm"> 
                 <tr>
                     <td>PPSN</td>
-                    <td><input type="text" name="PPSN" id="idInput"></td>      
-                </tr>
+                    <td><input type="number" name="PPSN" id="idInput" required></td><td style="color: red;">(javascript complained about the alphanumeric structure for a primary key, so I ditched the letters.)</td>     
+                    </tr>
                 <tr>
                     <td>name</td>
-                    <td><input type="text" name="name"></td>      
+                    <td><input type="text" name="name" required></td><td style="color: red;">(The Python script I used to create the initial values in mysql (PythonInsert.py, included) had regex controls to force all of these entries to correctly formatted, but I've not managed to implement this as neatly for html.)</td>      
                 </tr>
                 <tr>
                     <td>Email</td>
-                    <td><input type="text" name="email"></td>      
+                    <td><input type="email" name="email" required></td><td style="color: red;">(These first three values shouldn't really be empty, but the others can. The various null/None/'' string combos were a pain to implement, so feel free to not fill everything in.)</td>     
                 </tr>
                 <tr>
                     <td>Age</td>
@@ -38,8 +53,9 @@
                     <td><input type="text" name="location"></td>      
                 </tr>
                 <tr>
-                    <td>Medical</td>
-                    <td><input type="text" name="medical"></td>      
+                    <td>Prior medical conditions</td>
+                    <td><input type="checkbox" name="medicaldd" id="medicaldd">
+                        <label for="hasprevious" value="0" ></label></td>
                 </tr>
                 <tr>
                     <td>Occupation</td>
@@ -47,25 +63,51 @@
                 </tr>
                 <tr>
                     <td>Stage</td>
-                    <td><input type="text" name="stage"></td>      
+                    <td><select name="stagedd" id="stagedd">
+                        <option value="0" selected></option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                        <option value="13">13</option>
+                        <option value="14">14</option>
+                        <option value="15">15</option>
+                        </select>
+                    </td><td style="color: red;">(The proposed solutions for resetting these seem aimed at a form environment, which I didn't opt for while following the tutorial, but would probably try for similar future endeavours.)</td>
                 </tr>
                 <tr>
-                    <td>Vaccinated_1</td>
-                    <td><input type="text" name="vaccinated_1"></td>      
+                    <td>Vaccinated_1</td> 
+                    <td><select name="vaccinated_1dd" id="vaccinated_1dd">
+                        <option value="0" selected></option>
+                        <option value="1">No</option>
+                        <option value="2">Yes</option>
+                    </select></td> <td style="color: red;">(The Python loop to have Vaccinated_2 depend on Vaccinated_1 was trivial... similar for HTML was not, so I haven't... Though I guess, in hindsight, dates would be more useful here.)</td>      
                 </tr>
                 <tr>
                     <td>Vaccinated_2</td>
-                    <td><input type="text" name="vaccinated_2"></td>
+                    <td><select name="vaccinated_2dd" id="vaccinated_2dd">
+                        <option value="0" selected></option>
+                        <option value="1">No</option>
+                        <option value="2">Yes</option>
+                        </select>
+                    <!--<td><input type="text" name="vaccinated_2"></td>-->
                 </tr>
-                    <td></td>
                     <td><button id="create-button" onclick="doCreate()">Create</button></td>
                     <td><button id="update-button" onclick="doUpdate()">Update</button></td>    
                 </tr>
             </table>
         </div>
         <div id="display">
-            <button onclick="showCreate()">Create</button>  
-            <h2>People</h2>
+            <button onclick="showCreate()">Register new</button>  
+            <h2>Registered:</h2>
             <table id="peopleTable" class="table">
                 <tr>
                     <th>PPSN</th><th>Name</th><th>Email</th><th>Age</th><th>Location</th><th>Medical</th><th>Occupation</th><th>Stage</th><th>Vaccinated_1</th><th>Vaccinated_2</th>
@@ -120,8 +162,8 @@
                 if (rowElement.cells[5].firstChild != null)
                     person.medical = rowElement.cells[5].firstChild.textContent 
                 if (rowElement.cells[6].firstChild != null)
-                    person.occupation = rowElement.cells[6].firstChild.textContent 
-                if (rowElement.cells[7].firstChild != null)
+                    person.occupation = rowElement.cells[6].firstChild.textContent
+                if (rowElement.cells[7].firstChild != null) // These are read from row, so don't need changing
                     person.stage = rowElement.cells[7].firstChild.textContent 
                 if (rowElement.cells[8].firstChild != null)
                     person.vaccinated_1 = rowElement.cells[8].firstChild.textContent 
@@ -142,25 +184,24 @@
                 if (person.location == null)
                     {form.querySelector('input[name=location]').value = ""} else
                     {form.querySelector('input[name=location]').value = person.location};
-                if (person.medical == null)
-                    {form.querySelector('input[name=medical]').value = ""} else
-                    {form.querySelector('input[name=medical]').value = person.medical};
+                //if (person.medical == null)
+                //    {form.querySelector('input[name=medical]').value = ""} else
+                //    {form.querySelector('input[name=medical]').value = person.medical};
                 if (person.occupation == null)
                     {form.querySelector('input[name=occupation]').value = ""} else
                     {form.querySelector('input[name=occupation]').value = person.occupation};
-                if (person.stage == null)
-                    {form.querySelector('input[name=stage]').value = ""} else
-                    {form.querySelector('input[name=stage]').value = person.stage};
-                if (person.vaccinated_1 == null)
-                    {form.querySelector('input[name=vaccinated_1]').value = ""} else
-                    {form.querySelector('input[name=vaccinated_1]').value = person.vaccinated_1};
-                if (person.vaccinated_2 == null)
-                    {form.querySelector('input[name=vaccinated_2]').value = ""} else
-                    {form.querySelector('input[name=vaccinated_2]').value = person.vaccinated_2};
+                console.log(person.stage)
+                // Updating the stage select is nontrivial, so abandoning for now
+                //if (person.vaccinated_1 == null)
+                //    {form.querySelector('input[name=vaccinated_1]').value = ""} else
+                //   {form.querySelector('input[name=vaccinated_1]').value = person.vaccinated_1};
+                //if (person.vaccinated_2 == null)
+                //    {form.querySelector('input[name=vaccinated_2]').value = ""} else
+                //    {form.querySelector('input[name=vaccinated_2]').value = person.vaccinated_2};
             }
 
             function doCreate(){
-                console.log("in doCreate")
+                //console.log("in doCreate", person)
                 person = getPersonFromForm()
                 $.ajax({
                     url:"/people",
@@ -235,27 +276,51 @@
                 else     
                     {rowElement.cells[4].firstChild.textContent = person.location}
                 //rowElement.cells[4].firstChild.textContent = person.location
-                if (rowElement.cells[5].firstChild == null)
-                    {rowElement.cells[5].firstChild = ""}
-                else     
-                    {rowElement.cells[5].firstChild.textContent = person.medical}
+                //if (rowElement.cells[5].firstChild == null)
+                //    {rowElement.cells[5].firstChild = ""}
+                //else     
+                //   {rowElement.cells[5].firstChild.textContent = person.medical}
+                if (document.getElementById("medicaldd").checked == true)
+                    {rowElement.cells[5].firstChild = 1}
+                else {rowElement.cells[5].firstChild = 0};
+                console.log("cbval was ", rowElement.cells[5].firstChild)
                 if (rowElement.cells[6].firstChild == null)
                     {rowElement.cells[6].firstChild = ""}
                 else     
                     {rowElement.cells[6].firstChild.textContent = person.occupation}
-                //rowElement.cells[6].firstChild.textContent = person.occupation
-                if (rowElement.cells[7].firstChild == null)
+                console.log("third spot", document.getElementById("stagedd").value)
+                var selectone = document.getElementById("stagedd"); // updating the table row from the form
+                var selectoneval = selectone.value
+                console.log(selectoneval)
+                if (selectoneval == 0)
                     {rowElement.cells[7].firstChild = ""}
                 else     
-                    {rowElement.cells[7].firstChild.textContent = person.stage}
-                if (rowElement.cells[8].firstChild == null)
+                    {rowElement.cells[7].firstChild = selectoneval};
+                //if (rowElement.cells[8].firstChild == null)
+                //    {rowElement.cells[8].firstChild = ""}
+                //else     
+                //    {rowElement.cells[8].firstChild.textContent = person.vaccinated_1}
+                console.log("First change")
+                var selecttwo = document.getElementById("vaccinated_1dd"); // updating the table row from the form
+                var selecttwoval = selecttwo.value
+                console.log(selecttwoval)
+                if (selecttwoval == 0)
                     {rowElement.cells[8].firstChild = ""}
-                else     
-                    {rowElement.cells[8].firstChild.textContent = person.vaccinated_1}
-                if (rowElement.cells[9].firstChild == null)
+                else if (selecttwoval == 1)      
+                    {rowElement.cells[8].firstChild = 0}
+                else {rowElement.cells[8].firstChild == 1};
+                var selectthree = document.getElementById("vaccinated_2dd"); // updating the table row from the form
+                var selectthreeval = selectthree.value
+                console.log(selectthreeval)
+                if (selectthreeval == 0)
                     {rowElement.cells[9].firstChild = ""}
-                else     
-                    {rowElement.cells[9].firstChild.textContent = person.vaccinated_2}        
+                else if (selecttwoval == 1)      
+                    {rowElement.cells[9].firstChild = 0}
+                else {rowElement.cells[9].firstChild == 1};
+                //if (rowElement.cells[9].firstChild == null)
+                //    {rowElement.cells[9].firstChild = ""}
+                //else     
+                //    {rowElement.cells[9].firstChild.textContent = person.vaccinated_2}        
                 console.log("updating table")
             }
 
@@ -277,21 +342,44 @@
                 if (form.querySelector('input[name="location"]').value == "")
                     {person.location = null} else
                     {person.location = form.querySelector('input[name="location"]').value};
-                if (form.querySelector('input[name=medical]').value == "")
-                    {person.medical = null} else
-                    {person.medical = form.querySelector('input[name=medical]').value};
+                //if (form.querySelector('input[name=medical]').value == "")
+                //    {person.medical = null} else
+                //    {person.medical = form.querySelector('input[name=medical]').value};
+                if (document.getElementById("medicaldd").checked == true)
+                    {person.medical = 1}
+                else {person.medical = 0};
                 if (form.querySelector('input[name="occupation"]').value == "")
                     {person.occupation = null} else
                     {person.occupation = form.querySelector('input[name="occupation"]').value};
-                if (form.querySelector('input[name=stage]').value == "")
+                var selectone = document.getElementById("stagedd"); // fourth spot
+                var selectoneval = selectone.value
+                console.log(selectoneval)
+                if (selectoneval == 0)
                     {person.stage = null} else
-                    {person.stage = form.querySelector('input[name=stage]').value};                
-                if (form.querySelector('input[name=vaccinated_1]').value == "")
-                    {person.vaccinated_1 = null} else
-                    {person.vaccinated_1 = form.querySelector('input[name=vaccinated_1]').value};                
-                if (form.querySelector('input[name=vaccinated_2]').value == "")
-                    {person.vaccinated_2 = null} else
-                    {person.vaccinated_2 = form.querySelector('input[name=vaccinated_2]').value};                
+                    {person.stage = selectoneval};
+                console.log("second change")
+                var selecttwo = document.getElementById("vaccinated_1dd"); // fourth spot
+                var selecttwoval = selecttwo.value
+                console.log(selecttwoval)
+                if (selecttwoval == 0)
+                    {person.vaccinated_1 = null} 
+                else if (selecttwoval == 1)
+                    {person.vaccinated_1 = 0}
+                else {person.vaccinated_1 = 1};
+                //if (form.querySelector('input[name=vaccinated_1]').value == "")
+                //    {person.vaccinated_1 = null} else
+                //    {person.vaccinated_1 = form.querySelector('input[name=vaccinated_1]').value};                
+                var selectthree = document.getElementById("vaccinated_2dd"); // fourth spot
+                var selectthreeval = selectthree.value
+                console.log(selectthreeval)
+                if (selectthreeval == 0)
+                    {person.vaccinated_2 = null} 
+                else if (selecttwoval == 1)
+                    {person.vaccinated_2 = 0}
+                else {person.vaccinated_2 = 1};
+                //if (form.querySelector('input[name=vaccinated_2]').value == "")
+                //    {person.vaccinated_2 = null} else
+                //    {person.vaccinated_2 = form.querySelector('input[name=vaccinated_2]').value};                
                 //console.log(person) 
                 return person
             }
@@ -336,11 +424,11 @@
                 form.querySelector('input[name="email"]').value = ''
                 form.querySelector('input[name="age"]').value = ''
                 form.querySelector('input[name="location"]').value = ''
-                form.querySelector('input[name="medical"]').value = ''
+                //form.querySelector('input[name="medical"]').value = ''
                 form.querySelector('input[name="occupation"]').value = '' 
-                form.querySelector('input[name="stage"]').value = ''                
-                form.querySelector('input[name="vaccinated_1"]').value = ''
-                form.querySelector('input[name="vaccinated_2"]').value = ''                 
+                //form.querySelector('input[name="stage"]').value = ''                
+                //form.querySelector('input[name="vaccinated_1"]').value = ''
+                //form.querySelector('input[name="vaccinated_2"]').value = ''                 
             }
 
             function addPersonToTable(person){
