@@ -9,6 +9,7 @@ mydb = mysql.connector.connect(
     database=cfg.mysql['database']
 )
 
+
 # This works, but requires more lines than multiple while loops,
 # and there's no obvious benefit, so we'll keep it simple.
 #value_ppsn = False; value_name = False
