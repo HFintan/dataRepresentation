@@ -401,8 +401,9 @@ table {
                     vaccinated_1:'true',
                     vaccinated_2:"false",
                 }
+		host = window.location.origin
                 $.ajax({
-                    url:'http://127.0.0.1:5000/people',
+                    url:host+'/people',
                     method:'GET',
                     datatype:'JSON',
                     success:function(results){
