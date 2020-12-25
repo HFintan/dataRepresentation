@@ -1,6 +1,8 @@
 # dataRepresentation
 DR module for gmithdip
 
+Name: Fintan Hegarty
+ID: G00376582
 
 ########################### Contents ########################
 # ProjectCreateTable.py
