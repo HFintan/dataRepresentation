@@ -39,7 +39,7 @@ I've granted all privileges on the database
 
 grant all privileges on *.* to ''@'localhost' identified by 'password' with grant option;
 
-##### OLSapp.py
+##### OLDapp.py
 For failed attempts to moving to pythonanywhere; mysql part gave too much grief.
 
 (ignorable)
@@ -56,11 +56,11 @@ staticpages/index.html
 
 # TO RUN
 
-0. Possibly adjust the mysql parameters in vaccineDAO.py, unfortunately.
+(0) Possibly adjust the mysql parameters in vaccineDAO.py, unfortunately.
 
-0. There's nothing unusual in requirements.txt; flask and mysql-connector.
+(0) There's nothing unusual in requirements.txt; flask and mysql-connector.
 
-0. Import init.sql into mysql as outlined above for sample entries
+(0) Import init.sql into mysql as outlined above for sample entries
 
 1. cd server
 
