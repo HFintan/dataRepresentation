@@ -169,7 +169,7 @@ table {
                     person.vaccinated_1 = rowElement.cells[8].firstChild.textContent 
                 if (rowElement.cells[9].firstChild != null)
                     person.vaccinated_2 = rowElement.cells[9].firstChild.textContent
-                console.log("person is", person)
+                // console.log("person is", person)
                 return person
             }
 
@@ -190,7 +190,7 @@ table {
                 if (person.occupation == null)
                     {form.querySelector('input[name=occupation]').value = ""} else
                     {form.querySelector('input[name=occupation]').value = person.occupation};
-                console.log(person.stage)
+                // console.log(person.stage)
                 // Updating the stage select is nontrivial, so abandoning for now
                 //if (person.vaccinated_1 == null)
                 //    {form.querySelector('input[name=vaccinated_1]').value = ""} else
@@ -210,7 +210,7 @@ table {
                     dataType:"JSON",
                     contentType: "application/json; charset=utf-8",
                     success:function(result){
-                        console.log(result)
+                        // console.log(result)
                         addPersonToTable(person)
                         showDisplay()
                         clearForm()
@@ -235,7 +235,7 @@ table {
                     dataType: "JSON",
                     contentType: "application/json; charset=utf-8",
                     success: function (result) {
-                        console.log(result)
+                        // console.log(result)
                         updateTableRow(person)
                         showDisplay()
                         clearForm()
@@ -283,15 +283,15 @@ table {
                 if (document.getElementById("medicaldd").checked == true)
                     {rowElement.cells[5].firstChild = 1}
                 else {rowElement.cells[5].firstChild = 0};
-                console.log("cbval was ", rowElement.cells[5].firstChild)
+                // console.log("cbval was ", rowElement.cells[5].firstChild)
                 if (rowElement.cells[6].firstChild == null)
                     {rowElement.cells[6].firstChild = ""}
                 else     
                     {rowElement.cells[6].firstChild.textContent = person.occupation}
-                console.log("third spot", document.getElementById("stagedd").value)
+                // console.log("third spot", document.getElementById("stagedd").value)
                 var selectone = document.getElementById("stagedd"); // updating the table row from the form
                 var selectoneval = selectone.value
-                console.log(selectoneval)
+                // console.log(selectoneval)
                 if (selectoneval == 0)
                     {rowElement.cells[7].firstChild = ""}
                 else     
@@ -300,10 +300,10 @@ table {
                 //    {rowElement.cells[8].firstChild = ""}
                 //else     
                 //    {rowElement.cells[8].firstChild.textContent = person.vaccinated_1}
-                console.log("First change")
+                // console.log("First change")
                 var selecttwo = document.getElementById("vaccinated_1dd"); // updating the table row from the form
                 var selecttwoval = selecttwo.value
-                console.log(selecttwoval)
+                // console.log(selecttwoval)
                 if (selecttwoval == 0)
                     {rowElement.cells[8].firstChild = ""}
                 else if (selecttwoval == 1)      
@@ -311,7 +311,7 @@ table {
                 else {rowElement.cells[8].firstChild == 1};
                 var selectthree = document.getElementById("vaccinated_2dd"); // updating the table row from the form
                 var selectthreeval = selectthree.value
-                console.log(selectthreeval)
+                // console.log(selectthreeval)
                 if (selectthreeval == 0)
                     {rowElement.cells[9].firstChild = ""}
                 else if (selecttwoval == 1)      
@@ -321,7 +321,7 @@ table {
                 //    {rowElement.cells[9].firstChild = ""}
                 //else     
                 //    {rowElement.cells[9].firstChild.textContent = person.vaccinated_2}        
-                console.log("updating table")
+                // console.log("updating table")
             }
 
             function getPersonFromForm(){
@@ -353,14 +353,14 @@ table {
                     {person.occupation = form.querySelector('input[name="occupation"]').value};
                 var selectone = document.getElementById("stagedd"); // fourth spot
                 var selectoneval = selectone.value
-                console.log(selectoneval)
+                // console.log(selectoneval)
                 if (selectoneval == 0)
                     {person.stage = null} else
                     {person.stage = selectoneval};
-                console.log("second change")
+                // console.log("second change")
                 var selecttwo = document.getElementById("vaccinated_1dd"); // fourth spot
                 var selecttwoval = selecttwo.value
-                console.log(selecttwoval)
+                //console.log(selecttwoval)
                 if (selecttwoval == 0)
                     {person.vaccinated_1 = null} 
                 else if (selecttwoval == 1)
@@ -371,7 +371,7 @@ table {
                 //    {person.vaccinated_1 = form.querySelector('input[name=vaccinated_1]').value};                
                 var selectthree = document.getElementById("vaccinated_2dd"); // fourth spot
                 var selectthreeval = selectthree.value
-                console.log(selectthreeval)
+                // console.log(selectthreeval)
                 if (selectthreeval == 0)
                     {person.vaccinated_2 = null} 
                 else if (selecttwoval == 1)
@@ -403,7 +403,7 @@ table {
                 }
 		host = window.location.origin
                 $.ajax({
-                    url:host+'/people',
+                    url:'http://127.0.0.1:5000/people',
                     method:'GET',
                     datatype:'JSON',
                     success:function(results){

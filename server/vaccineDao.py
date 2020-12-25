@@ -4,13 +4,14 @@ import mysql.connector
 class VaccineDao:
     db=""
     def __init__(self):
-    # dbconfig was giving me an error for Django, so I abandoned it.
+    # dbconfig was giving me an error for Django after an update
+    # though it had been working previously, so I abandoned it.
     #    self.db = mysql.connector.connect(
     #    host=cfg.mysql['host'],
     #    user=cfg.mysql['user'],
     #    password=cfg.mysql['password'],
     #    database=cfg.mysql['database']
-    #)
+    #)    
         self.db = mysql.connector.connect(
         host='localhost',
         user='fintan',
@@ -45,7 +46,7 @@ class VaccineDao:
         cursor.execute(sql)
         results = cursor.fetchall()
         returnArray = []
-        print(results)
+        # print(results)
         for result in results:
             resultAsDict = self.convertToDict(result)
             returnArray.append(resultAsDict)
